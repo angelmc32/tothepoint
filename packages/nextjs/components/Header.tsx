@@ -23,7 +23,7 @@ export const menuLinks: HeaderMenuLink[] = [
   },
   {
     label: "Impacto",
-    href: "/reporte",
+    href: "/reportes",
     icon: <SparklesIcon className="h-4 w-4" />,
   },
   {

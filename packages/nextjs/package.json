@@ -8,6 +8,7 @@
     "dev": "next dev",
     "format": "prettier --write . '!(node_modules|.next|contracts)/**/*'",
     "lint": "next lint",
+    "postinstall": "prisma generate",
     "serve": "next start",
     "start": "next dev",
     "vercel": "vercel",

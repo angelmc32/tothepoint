@@ -3492,6 +3492,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vidstack/react@npm:next":
+  version: 1.10.9
+  resolution: "@vidstack/react@npm:1.10.9"
+  dependencies:
+    media-captions: ^1.0.1
+  peerDependencies:
+    "@types/react": ^18.0.0
+    react: ^18.0.0
+  checksum: e6cc7abc0c7b74f4e655090e293d33e06c6ed397f3d167371fbf960557e4132e7ee3d326a53a1ab38d96e700412b70f07198018ae83f3f371471f4ce61a0cf0c
+  languageName: node
+  linkType: hard
+
 "@wagmi/connectors@npm:3.1.10":
   version: 3.1.10
   resolution: "@wagmi/connectors@npm:3.1.10"
@@ -9684,6 +9696,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"media-captions@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "media-captions@npm:1.0.2"
+  checksum: 490f69554d8e0ecacbf8743dd4cf0925d8b0da53fc3a987187046d5b409d4421bdd42c6119a24148900990ad5c52cf9aadb9d6303796ea2f6357c195af0a8aee
+  languageName: node
+  linkType: hard
+
 "media-query-parser@npm:^2.0.2":
   version: 2.0.2
   resolution: "media-query-parser@npm:2.0.2"
@@ -11982,6 +12001,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
+    "@vidstack/react": next
     husky: ~8.0.3
     lint-staged: ~13.2.2
   languageName: unknown
