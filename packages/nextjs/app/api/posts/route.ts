@@ -6,7 +6,6 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const posts = await prisma.gmPost.findMany({ orderBy: { createdAt: "desc" } });
-    console.log(posts);
     return NextResponse.json({ posts, message: "Post was created successfully", success: true });
   } catch (error) {
     console.error(error);

@@ -53,9 +53,7 @@ const Home: NextPage = () => {
       const response = await fetch("api/posts", {
         method: "GET",
       });
-      console.log(response);
       const data = await response.json();
-      console.log(data.posts);
       setPosts(data.posts);
       if (response.status === 200) {
         notification.success(`Se han cargado los reportes exitosamente`);

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { NetworkOptions } from "./NetworkOptions";
+import { signOut } from "next-auth/react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { Address, useDisconnect } from "wagmi";
 import {
@@ -135,7 +136,10 @@ export const AddressInfoDropdown = ({
             <button
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
               type="button"
-              onClick={() => disconnect()}
+              onClick={async () => {
+                await signOut({ redirect: false, callbackUrl: "/foo" });
+                disconnect();
+              }}
             >
               <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
             </button>
