@@ -12,7 +12,7 @@ module.exports = {
           "primary-content": "#212638",
           secondary: "#DAE8FF",
           "secondary-content": "#212638",
-          accent: "#93BBFB",
+          accent: "#E04F60",
           "accent-content": "#212638",
           neutral: "#212638",
           "neutral-content": "#ffffff",
@@ -25,7 +25,7 @@ module.exports = {
           warning: "#FFCF72",
           error: "#FF8863",
 
-          "--rounded-btn": "9999rem",
+          "--rounded-btn": "0.5rem",
 
           ".tooltip": {
             "--tooltip-tail": "6px",
@@ -44,7 +44,7 @@ module.exports = {
           "primary-content": "#F9FBFF",
           secondary: "#323f61",
           "secondary-content": "#F9FBFF",
-          accent: "#4969A6",
+          accent: "#E04F60",
           "accent-content": "#F9FBFF",
           neutral: "#F9FBFF",
           "neutral-content": "#385183",
@@ -57,7 +57,7 @@ module.exports = {
           warning: "#FFCF72",
           error: "#FF8863",
 
-          "--rounded-btn": "9999rem",
+          "--rounded-btn": "0.5rem",
 
           ".tooltip": {
             "--tooltip-tail": "6px",
@@ -80,6 +80,12 @@ module.exports = {
       },
       animation: {
         "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)"],
+        museoModerno: ["var(--font-museoModerno)"],
+        raleway: ["var(--font-raleway)"],
+        sora: ["var(--font-sora)"],
       },
     },
   },

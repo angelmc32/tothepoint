@@ -9,24 +9,36 @@
 
 body {
   min-height: 100vh;
+  @apply font-raleway;
 }
 
 h1,
 h2,
 h3,
-h4 {
-  margin-bottom: 0.5rem;
-  line-height: 1;
+h4,
+h5,
+h6 {
+  @apply font-sora font-medium;
 }
 
-p {
-  margin: 1rem 0;
+.input,
+.textarea {
+  font-size: 1rem;
+}
+
+.textarea {
+  line-height: 1.5rem;
 }
 
 .btn {
   @apply shadow-md;
+  font-size: 1rem;
 }
 
 .btn.btn-ghost {
   @apply shadow-none;
+}
+
+.btn.btn-accent {
+  color: #fff;
 }

@@ -1,55 +1,75 @@
-import Link from "next/link";
+"use client";
+
+import { FormEvent, useState } from "react";
 import type { NextPage } from "next";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 const Home: NextPage = () => {
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+  });
+
+  function createReport(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log(form);
+  }
   return (
     <>
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center mb-8">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
-          </h1>
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/app/page.tsx
-            </code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
-          </p>
-        </div>
-
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contract
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
+      <div className="hero bg-base-200 flex-grow pt-8">
+        <div className="hero-content px-6 flex flex-col lg:flex-row lg:items-start lg:pb-8 xl:pb-16">
+          <div className="w-full lg:w-1/2 lg:flex lg:flex-col lg:pt-8">
+            <h1 className="text-5xl leading-[1.05] lg:pl-12">
+              Cuenta <span className="underline underline-offset-8 decoration-accent">historias</span> <br />y comparte
+              emociones ✨
+            </h1>
+            <p className="pt-4 text-lg px-4 lg:pl-12">
+              Con <span className="text-accent font-bold">gm</span>report descubre el impacto
+              <br className="hidden md:block" /> de lo que sucede en Web3, un reporte a la vez
+            </p>
+          </div>
+          <div className="w-full lg:w-1/2 px-4">
+            <div className="bg-base-100 border-primary border-2 shadow-md shadow-secondary rounded-xl px-6 lg:px-8 mb-6 space-y-2 py-8">
+              <h4 className="text-xl">Crea un Reporte</h4>
+              <form className="flex flex-col space-y-1 w-full" onSubmit={createReport}>
+                <div>
+                  <label className="label py-1" htmlFor="title">
+                    <span className="text-base label-text">Video</span>
+                  </label>
+                  <input
+                    type="file"
+                    className="file-input file-input-primary file-input-bordered border-2 w-full rounded-lg h-10 bg-base-200"
+                  />
+                </div>
+                <div>
+                  <label className="label py-1" htmlFor="title">
+                    <span className="text-base label-text">Título</span>
+                  </label>
+                  <textarea
+                    id="title"
+                    name="description"
+                    value={form.title}
+                    onChange={event => setForm({ ...form, title: event.target.value })}
+                    className="textarea textarea-primary border-2 w-full rounded-lg bg-base-200 text-left"
+                    rows={2}
+                  />
+                </div>
+                <div>
+                  <label className="label py-1" htmlFor="description">
+                    <span className="text-base label-text">Descripción</span>
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={form.description}
+                    onChange={event => setForm({ ...form, description: event.target.value })}
+                    className="textarea textarea-primary border-2 w-full rounded-lg bg-base-200 text-left"
+                    rows={4}
+                  />
+                </div>
+                <div className="w-full flex justify-center pt-4">
+                  <button className="btn btn-accent rounded-lg">Crear reporte</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
