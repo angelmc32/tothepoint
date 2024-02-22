@@ -39,7 +39,7 @@ const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
 };
 
 const getSiweMessageOptions: GetSiweMessageOptions = () => ({
-  statement: "Inicia sesión en gmreport 🌞",
+  statement: "Inicia sesión a encorto 🌞",
 });
 
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {

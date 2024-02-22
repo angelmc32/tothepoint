@@ -58,8 +58,8 @@ const CreatePost: NextPage = () => {
               emociones ✨
             </h1>
             <p className="pt-4 text-lg px-4 lg:pl-12">
-              Con <span className="text-accent font-bold">gm</span>report descubre el impacto
-              <br className="hidden md:block" /> de lo que sucede en Web3, un reporte a la vez
+              Descubre <span className="text-accent font-bold">en corto</span> el impacto
+              <br className="hidden md:block" /> de lo que sucede en Web3
             </p>
           </div>
           <div className="w-full lg:w-1/2 px-4">

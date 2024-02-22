@@ -13,14 +13,14 @@ const imageUrl = `${baseUrl}/thumbnail.jpg`;
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "gm report",
-    template: "%s | gm report",
+    default: "encorto",
+    template: "%s | encorto",
   },
   description: "Create and publish impact-worthy posts",
   openGraph: {
     title: {
-      default: "gm report",
-      template: "%s | gm report",
+      default: "encorto",
+      template: "%s | encorto",
     },
     description: "Create and publish impact-worthy posts",
     images: [
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: [imageUrl],
     title: {
-      default: "gm report",
-      template: "%s | gm report",
+      default: "encorto",
+      template: "%s | encorto",
     },
     description: "Create and publish impact-worthy posts",
   },

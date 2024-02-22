@@ -84,7 +84,7 @@ export const Header = () => {
           </div>
           <div className="hidden lg:flex lg:flex-col">
             <span className={`${museoModernoFont.className} text-2xl`}>
-              <span className="text-accent font-bold">gm</span>report
+              en<span className="text-accent font-bold">corto</span>
             </span>
           </div>
         </Link>
