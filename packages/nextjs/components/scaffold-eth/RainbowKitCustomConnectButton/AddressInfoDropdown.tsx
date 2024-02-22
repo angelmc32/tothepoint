@@ -137,7 +137,7 @@ export const AddressInfoDropdown = ({
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
               type="button"
               onClick={async () => {
-                await signOut({ redirect: false, callbackUrl: "/foo" });
+                await signOut({ redirect: false, callbackUrl: "/" });
                 disconnect();
               }}
             >

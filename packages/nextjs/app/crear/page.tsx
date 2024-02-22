@@ -3,6 +3,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { NextPage } from "next";
+import { useAccount } from "wagmi";
+import { RainbowKitFormConnectButton } from "~~/components/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 const CreatePost: NextPage = () => {
@@ -14,6 +16,7 @@ const CreatePost: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { push } = useRouter();
+  const { address, isConnected } = useAccount();
 
   async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) setFile(event.target.files[0]);
@@ -22,22 +25,23 @@ const CreatePost: NextPage = () => {
   async function createReport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData();
-    if (!file || !form.title || !form.description) {
+    if (!file || !form.title || !form.description || !address) {
       return notification.error("Todos los campos son requeridos para crear Reporte");
     }
     formData.append("file", file);
     formData.append("title", form.title);
     formData.append("description", form.description);
+    formData.append("connectedAddress", address);
     setIsLoading(true);
     try {
-      const response = await fetch("api/upload-video", {
+      const response = await fetch("api/posts", {
         method: "POST",
         body: formData,
       });
       const data = await response.json();
       if (response.status === 200) {
-        notification.success(`Tu publicación fue creada con id ${data.post.id}`);
-        push("/");
+        notification.success(`Tu publicación fue creada exitosamente`);
+        push(`/shorts/${data.post.id}`);
       } else {
         notification.error(data.error);
       }
@@ -103,10 +107,14 @@ const CreatePost: NextPage = () => {
                   />
                 </div>
                 <div className="w-full flex justify-center pt-4">
-                  <button className="btn btn-accent rounded-lg" disabled={isLoading}>
-                    {isLoading ? "Creando..." : "Crear reporte"}
-                    {isLoading && <span className="loading loading-spinner loading-sm"></span>}
-                  </button>
+                  {isConnected ? (
+                    <button className="btn btn-accent rounded-lg" disabled={isLoading}>
+                      {isLoading ? "Creando..." : "Crear reporte"}
+                      {isLoading && <span className="loading loading-spinner loading-sm"></span>}
+                    </button>
+                  ) : (
+                    <RainbowKitFormConnectButton />
+                  )}
                 </div>
               </form>
             </div>

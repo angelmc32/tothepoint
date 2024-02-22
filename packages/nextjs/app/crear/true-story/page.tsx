@@ -1,9 +1,15 @@
 "use client";
 
 import React, { FormEvent, useState } from "react";
+import Link from "next/link";
+import { SchemaEncoder } from "@ethereum-attestation-service/eas-sdk";
+import { zeroAddress } from "viem";
 import { useAccount } from "wagmi";
+import appConfig from "~~/config";
+import { useEAS } from "~~/hooks/useEAS";
+import { trueStoryAttestation } from "~~/lib/forms/attestations";
 
-const reactionsArray = [
+const emotionsArray = [
   { id: "like", value: "like", label: "👍" },
   { id: "care", value: "care", label: "🔥" },
   { id: "surprise", value: "surprise", label: "😮" },
@@ -18,28 +24,72 @@ const reactionsArray = [
 
 export default function TrueStory() {
   const [form, setForm] = useState({
-    reaction: "",
+    emotion: "",
     impactRating: 0,
   });
+  const [attestationUid, setAttestationUID] = useState("");
+  const [txHash, setTxHash] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { eas } = useEAS();
 
   const account = useAccount();
-  function createReport(event: FormEvent) {
-    setIsLoading(true);
+
+  async function createReport(event: FormEvent) {
     event?.preventDefault();
-    console.log(form);
-    setTimeout(() => {
+    setIsLoading(true);
+    if (!eas) return;
+    try {
+      const schemaEncoder = new SchemaEncoder(appConfig.attestations.scrollSepolia.impactReport.schema);
+      const encodedData = schemaEncoder.encodeData([
+        { name: "cortoAddress", value: zeroAddress, type: "address" },
+        { name: "cortoTokenId", value: zeroAddress, type: "uint256" },
+        { name: "cortoId", value: "test-id", type: "string" },
+        { name: "cortoName", value: trueStoryAttestation.cortoName, type: "string" },
+        { name: "emotionQuestion", value: trueStoryAttestation.emotionQuestion, type: "string" },
+        { name: "emotion", value: form.emotion, type: "string" },
+        { name: "impactQuestion", value: trueStoryAttestation.impactQuestion, type: "string" },
+        { name: "impactRating", value: form.impactRating, type: "uint8" },
+        { name: "attestRole", value: trueStoryAttestation.attestRole, type: "string" },
+      ]);
+
+      const transaction = await eas.attest({
+        schema: appConfig.attestations.scrollSepolia.impactReport.id,
+        data: {
+          recipient: "0xF54f4815f62ccC360963329789d62d3497A121Ae",
+          expirationTime: undefined,
+          revocable: true,
+          data: encodedData,
+        },
+      });
+
+      const newAttestationUID = await transaction.wait();
+      setAttestationUID(newAttestationUID);
+      setTxHash(transaction.tx.hash);
+      setForm({
+        emotion: "",
+        impactRating: 0,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
       setIsLoading(false);
-    }, 3000);
+    }
   }
   return (
     <div className="hero bg-base-200 flex-grow pt-8 md:pt-16 lg:pt-8 h-full xl:pt-16">
       <div className="h-full align-start px-6 flex flex-col xl:pb-16 w-full md:w-3/5 lg:px-16 space-y-4 xl:w-1/2">
         <div className="w-full px-4">
-          <p className="text-lg">
-            Al responder estas preguntas y firmar, crearemos una atestación que certificará la entrevista que le
-            realizaron
-          </p>
+          {attestationUid ? (
+            <div className="flex flex-col space-y-2">
+              <Link href={appConfig.explorers.scrollSepolia.attestation + attestationUid}>Atestación</Link>
+              <Link href={appConfig.explorers.scrollSepolia.blockchain + "tx/" + txHash}>Tx</Link>
+            </div>
+          ) : (
+            <p className="text-lg">
+              Al responder estas preguntas y firmar, crearemos una atestación que certificará la entrevista que le
+              realizaron
+            </p>
+          )}
         </div>
         <div className="w-full px-4">
           <div className="bg-base-100 border-primary border-2 shadow-md shadow-secondary rounded-xl px-6 lg:px-8 mb-6 space-y-2 py-8 xl:px-16 xl:py-12">
@@ -58,29 +108,29 @@ export default function TrueStory() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="label py-1" htmlFor="reaction">
+                <label className="label py-1" htmlFor="emotion">
                   <span className="text-base label-text">¿Cómo te sentiste durante la entrevista?</span>
                 </label>
                 <div className="w-full flex justify-center">
                   <div className="grid grid-cols-5 grid-rows-2 gap-x-2 gap-y-4">
-                    {reactionsArray.map((reaction, index) => (
+                    {emotionsArray.map((emotion, index) => (
                       <label
-                        htmlFor={reaction.id}
+                        htmlFor={emotion.id}
                         className={`btn btn-sm rounded-full ${
-                          form.reaction === reaction.value ? "btn-accent" : "btn-secondary"
+                          form.emotion === emotion.value ? "btn-accent" : "btn-secondary"
                         }`}
-                        key={reaction.id + index}
+                        key={emotion.id + index}
                       >
                         <input
                           type="radio"
-                          name="reaction"
+                          name="emotion"
                           className="hidden"
-                          value={reaction.value}
-                          id={reaction.id}
-                          checked={form.reaction === reaction.value}
-                          onChange={event => setForm({ ...form, reaction: event?.target.value })}
+                          value={emotion.value}
+                          id={emotion.id}
+                          checked={form.emotion === emotion.value}
+                          onChange={event => setForm({ ...form, emotion: event?.target.value })}
                         />
-                        {reaction.label}
+                        {emotion.label}
                       </label>
                     ))}
                   </div>
@@ -148,7 +198,7 @@ export default function TrueStory() {
               </div>
               <div className="w-full flex justify-center">
                 <button className="btn btn-accent rounded-lg" disabled={isLoading}>
-                  {isLoading ? "Creando..." : "Crear reporte"}
+                  {isLoading ? "Creando..." : "Crear Atestación"}
                   {isLoading && <span className="loading loading-spinner loading-sm"></span>}
                 </button>
               </div>

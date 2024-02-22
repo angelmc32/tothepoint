@@ -32,7 +32,56 @@ export const RainbowKitCustomConnectButton = () => {
               if (!connected) {
                 return (
                   <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
-                    Connect Wallet
+                    Conecta tu cartera
+                  </button>
+                );
+              }
+
+              if (chain.unsupported || chain.id !== targetNetwork.id) {
+                return <WrongNetworkDropdown />;
+              }
+
+              return (
+                <>
+                  <AddressInfoDropdown
+                    address={account.address as Address}
+                    displayName={account.displayName}
+                    ensAvatar={account.ensAvatar}
+                    blockExplorerAddressLink={blockExplorerAddressLink}
+                    networkColor={networkColor}
+                    chainName={chain.name}
+                  />
+                  <AddressQRCodeModal address={account.address as Address} modalId="qrcode-modal" />
+                </>
+              );
+            })()}
+          </>
+        );
+      }}
+    </ConnectButton.Custom>
+  );
+};
+
+export const RainbowKitFormConnectButton = () => {
+  useAutoConnect();
+  const networkColor = useNetworkColor();
+  const { targetNetwork } = useTargetNetwork();
+
+  return (
+    <ConnectButton.Custom>
+      {({ account, chain, openConnectModal, mounted }) => {
+        const connected = mounted && account && chain;
+        const blockExplorerAddressLink = account
+          ? getBlockExplorerAddressLink(targetNetwork, account.address)
+          : undefined;
+
+        return (
+          <>
+            {(() => {
+              if (!connected) {
+                return (
+                  <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
+                    Conecta tu cartera
                   </button>
                 );
               }

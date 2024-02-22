@@ -27,7 +27,6 @@ export default function ImpactReport() {
   function createReport(event: FormEvent) {
     setIsLoading(true);
     event?.preventDefault();
-    console.log(form);
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
