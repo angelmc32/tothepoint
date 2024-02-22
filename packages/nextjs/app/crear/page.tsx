@@ -51,9 +51,9 @@ const CreatePost: NextPage = () => {
   return (
     <>
       <div className="hero bg-base-200 flex-grow pt-8">
-        <div className="hero-content px-6 flex flex-col lg:flex-row lg:items-start lg:pb-8 xl:pb-16">
+        <div className="hero-content px-6 flex flex-col lg:flex-row lg:items-start md:pb-24 lg:pb-8 xl:pb-16 md:w-3/4 lg:w-full lg:px-12 xl:px-16">
           <div className="w-full lg:w-1/2 lg:flex lg:flex-col lg:pt-8">
-            <h1 className="text-4xl md:text-5xl leading-[1.05] lg:pl-12">
+            <h1 className="text-4xl lg:text-5xl leading-[1.05] lg:pl-12">
               Cuenta <span className="underline underline-offset-8 decoration-accent">historias</span> <br />y comparte
               emociones ✨
             </h1>
