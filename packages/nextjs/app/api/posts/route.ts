@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
   const title: string = data.get("title") as unknown as string;
   const description: string = data.get("description") as unknown as string;
   const connectedAddress: string = data.get("connectedAddress") as unknown as string;
+  const collaborator: string = data.get("collaborator") as unknown as string;
 
   if (!file || !title || !description || !connectedAddress) {
     return NextResponse.json(
@@ -85,6 +86,7 @@ export async function POST(request: NextRequest) {
           content: description,
           mediaUrl: cdnUrl + videoData?.path,
           author: sessionAddress,
+          collaborators: [collaborator],
         },
       });
       return NextResponse.json({ post, message: "Post was created successfully", success: true });

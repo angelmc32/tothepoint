@@ -29,7 +29,10 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   const data = await request.json();
 
   try {
-    const updatedPost = await prisma.post.update({ where: { id: id }, data });
+    const updatedPost = await prisma.post.update({
+      where: { id },
+      data,
+    });
     return NextResponse.json({ post: updatedPost, success: true });
   } catch (error) {
     console.error(error);

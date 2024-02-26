@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
-import { RainbowKitFormConnectButton } from "~~/components/scaffold-eth";
+import { AddressInput, RainbowKitFormConnectButton } from "~~/components/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 const CreatePost: NextPage = () => {
@@ -13,6 +13,7 @@ const CreatePost: NextPage = () => {
     title: "",
     description: "",
   });
+  const [collaboratorAddress, setCollaboratorAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { push } = useRouter();
@@ -32,6 +33,7 @@ const CreatePost: NextPage = () => {
     formData.append("title", form.title);
     formData.append("description", form.description);
     formData.append("connectedAddress", address);
+    formData.append("collaborator", collaboratorAddress);
     setIsLoading(true);
     try {
       const response = await fetch("api/posts", {
@@ -104,6 +106,17 @@ const CreatePost: NextPage = () => {
                     onChange={event => setForm({ ...form, description: event.target.value })}
                     className="textarea textarea-primary border-2 w-full rounded-lg bg-base-200 text-left"
                     rows={4}
+                  />
+                </div>
+                <div>
+                  <label className="label py-1" htmlFor="collaborator">
+                    <span className="text-base label-text">Colabora:</span>
+                  </label>
+                  <AddressInput
+                    value={collaboratorAddress}
+                    name="collaborator"
+                    placeholder="Dirección o ENS"
+                    onChange={setCollaboratorAddress}
                   />
                 </div>
                 <div className="w-full flex justify-center pt-4">

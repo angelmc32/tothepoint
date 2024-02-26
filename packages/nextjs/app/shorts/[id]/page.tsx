@@ -9,13 +9,14 @@ import { zeroAddress } from "viem";
 import { useAccount, useNetwork } from "wagmi";
 import { ArrowLeftIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import ShortCard from "~~/components/cards/ShortCard";
-import { RainbowKitFormConnectButton } from "~~/components/scaffold-eth";
+import { AddressInput, RainbowKitFormConnectButton } from "~~/components/scaffold-eth";
 import appConfig from "~~/config";
 import { useEAS } from "~~/hooks/useEAS";
 import { cortoImpactAttestation, trueStoryAttestation } from "~~/lib/forms/attestations";
 import { emotionsArray, getEmojiFromString } from "~~/lib/forms/emotions";
 import { AttestationType, PostType } from "~~/types";
 import { notification } from "~~/utils/scaffold-eth";
+import { truncateString } from "~~/utils/string";
 
 export default function Short() {
   const [post, setPost] = useState<PostType | undefined>(undefined);
@@ -24,6 +25,8 @@ export default function Short() {
     emotion: "",
     impactRating: 0,
   });
+  const [collaboratorAddress, setCollaboratorAddress] = useState("");
+  const [showCollaboratorInput, setShowCollaboratorInput] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isInterviewee, setIsInterviewee] = useState(false);
   const [userAttestation, setUserAttestation] = useState<AttestationType | undefined>(undefined);
@@ -62,20 +65,6 @@ export default function Short() {
       setIsInterviewee(session.data?.user?.name === post?.collaborators[0]);
     }
   }, [session, post]);
-
-  // async function updatePost(event: FormEvent) {
-  //   event.preventDefault();
-
-  //   const response = await fetch(`/api/posts/${post?.id}`, {
-  //     method: "PATCH",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       emotion: form.emotion,
-  //       impact: form.impactRating,
-  //     }),
-  //   });
-  //   const data = await response.json();
-  // }
 
   async function createAttestation(attestationId: string, txId: string) {
     let chainName: string;
@@ -204,6 +193,29 @@ export default function Short() {
     }
   }
 
+  async function addCollaborator() {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/posts/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          collaborators: [collaboratorAddress],
+        }),
+      });
+      const data = await response.json();
+      setPost(data.post);
+      notification.success("El corto fue actualizado exitosamente");
+    } catch (error) {
+      console.error(error);
+      notification.error("No fue posible actualizar el corto");
+    } finally {
+      setCollaboratorAddress("");
+      setShowCollaboratorInput(false);
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className="hero bg-base-200 flex-grow pt-8 md:pt-16 lg:pt-8 h-full xl:pt-16">
       <div className="h-full align-start px-6 flex flex-col xl:pb-16 w-full md:w-3/5 lg:px-16 space-y-4 xl:w-1/2">
@@ -217,6 +229,74 @@ export default function Short() {
           {hasLoadedPost && post ? (
             <>
               <ShortCard id={post.id} title={post.title} content={post.content} mediaUrl={post?.mediaUrl} layout="col">
+                {post.collaborators.length > 0 ? (
+                  <div className="flex space-x-2">
+                    <span>Colabora:</span>{" "}
+                    <Link
+                      className="flex text-accent font-medium"
+                      href={`${appConfig.explorers.scrollSepolia.blockchain}/${post.collaborators[0]}`}
+                    >
+                      {truncateString(post.collaborators[0], 8, 10)}
+                      <ArrowTopRightOnSquareIcon className="h-4 w-4 ml-2" />
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <span>Colabora:</span>
+                    {showCollaboratorInput ? (
+                      <div className="w-full flex justify-end space-x-4">
+                        <button
+                          className="btn btn-sm btn-secondary border-base-300 border-2 !text-sm font-normal"
+                          onClick={addCollaborator}
+                          disabled={collaboratorAddress.length !== 42 || isLoading}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                          </svg>
+                        </button>
+                        <button
+                          className="btn btn-sm btn-secondary border-base-300 border-2 !text-sm font-normal"
+                          onClick={() => setShowCollaboratorInput(false)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        className="btn btn-sm btn-secondary border-base-300 border-2 !text-sm font-normal"
+                        onClick={() => setShowCollaboratorInput(!showCollaboratorInput)}
+                      >
+                        agrega colaborador
+                      </button>
+                    )}
+                  </div>
+                )}
+                {showCollaboratorInput && (
+                  <div className="px-2">
+                    <AddressInput
+                      onChange={setCollaboratorAddress}
+                      value={collaboratorAddress}
+                      name="collaborator"
+                      placeholder="Dirección o ENS"
+                    />
+                  </div>
+                )}
                 {userAttestation ? (
                   <div className="px-4 md:px-8 py-4">
                     <div className="flex flex-col space-y-4 md:space-y-6 w-full border-base-300 border-2 rounded-box py-6 md:py-4 px-4">
@@ -292,7 +372,7 @@ export default function Short() {
                             />
                           </div>
                         </div>
-                        <div className="flex justify-between text-sm md:px-4 lg:px-12 xl:px-16">
+                        <div className="flex justify-between text-sm md:px-4">
                           <p className="text-center">Inconsecuente</p>
                           <p className="text-center">Trascendental</p>
                         </div>
