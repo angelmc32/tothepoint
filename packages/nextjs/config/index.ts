@@ -1,6 +1,7 @@
-const availableNetworks = ["scrollSepolia", "optimismSepolia"] as const;
+const availableNetworks = ["optimismMainnet", "scrollSepolia", "optimismSepolia"] as const;
 type AvailableNetworks = (typeof availableNetworks)[number];
 
+const alchemyRpcUrl = process.env.NEXT_PUBLIC_ALCHEMY_URL ?? "https://mainnet.optimism.io";
 // RPC
 type RPCs = Record<
   AvailableNetworks,
@@ -9,10 +10,13 @@ type RPCs = Record<
   }
 >;
 const rpcs: RPCs = {
-  scrollSepolia: {
-    http: "https://sepolia.optimism.io",
+  optimismMainnet: {
+    http: alchemyRpcUrl,
   },
   optimismSepolia: {
+    http: "https://sepolia.optimism.io",
+  },
+  scrollSepolia: {
     http: "https://sepolia-rpc.scroll.io",
   },
 };
@@ -26,6 +30,10 @@ type Addresses = Record<
   }
 >;
 const addresses: Addresses = {
+  optimismMainnet: {
+    easContract: "0x4200000000000000000000000000000000000021",
+    schemaRegistryContract: "0x4200000000000000000000000000000000000020",
+  },
   scrollSepolia: {
     easContract: "0xaEF4103A04090071165F78D45D83A0C0782c2B2a",
     schemaRegistryContract: "0x55D26f9ae0203EF95494AE4C170eD35f4Cf77797",
@@ -45,6 +53,10 @@ type Explorers = Record<
   }
 >;
 const explorers: Explorers = {
+  optimismMainnet: {
+    blockchain: "https://explorer.optimism.io",
+    attestation: "https://optimism.easscan.org/attestation/view",
+  },
   scrollSepolia: {
     blockchain: "https://sepolia.scrollscan.com",
     attestation: "https://scroll-sepolia.easscan.org/attestation/view",
@@ -69,6 +81,14 @@ type Attestations = Record<
 >;
 
 const attestations: Attestations = {
+  optimismMainnet: {
+    impactReport: {
+      id: "0x77d7c27963d7285d3a7c63c6227f52f54634c0e7dd96bf89ce99e1bd00d4bbff",
+      name: "Reporte de Impacto",
+      schema:
+        "address postAddress, uint256 postTokenId, string postId, string postName, string emotionQuestion, string emotion, string impactQuestion, uint8 impact, string attesterRole",
+    },
+  },
   scrollSepolia: {
     impactReport: {
       id: "0x426fe0f5e2eb0ff970e3760b82683aea2198eca82afb2b30122249eaa51a436b",

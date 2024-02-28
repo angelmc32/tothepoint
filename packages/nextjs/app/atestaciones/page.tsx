@@ -115,7 +115,7 @@ const Attestations: NextPage = () => {
                       </div>
                       <div className="w-full flex flex-col items-center pt-2 space-y-2">
                         <Link
-                          href={appConfig.explorers.scrollSepolia.attestation + `/${attestation.id}`}
+                          href={appConfig.explorers.optimismMainnet.attestation + `/${attestation.id}`}
                           target="blank"
                           rel="noopener noreferrer"
                           className="flex items-center space-x-1 dark:text-accent font-bold"
@@ -124,7 +124,7 @@ const Attestations: NextPage = () => {
                           <ArrowTopRightOnSquareIcon className="h-4 w-4 mb-1" />
                         </Link>
                         <Link
-                          href={appConfig.explorers.scrollSepolia.blockchain + `/tx/${attestation.txId}`}
+                          href={appConfig.explorers.optimismMainnet.blockchain + `/tx/${attestation.txId}`}
                           target="blank"
                           rel="noopener noreferrer"
                           className="flex items-center space-x-1 text-blue-700 dark:text-accent font-bold"

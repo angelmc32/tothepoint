@@ -71,7 +71,7 @@ export default function Short() {
     if (network.chain?.name === "Scroll Sepolia") {
       chainName = "SCROLL_SEPOLIA";
     } else {
-      chainName = "ARBITRUM_ONE";
+      chainName = "OPTIMISM_MAINNET";
     }
     const createAttestationRes = await fetch("/api/attestations", {
       method: "POST",
@@ -80,7 +80,7 @@ export default function Short() {
         attestationId,
         txId,
         chain: chainName,
-        schemaId: appConfig.attestations.scrollSepolia.impactReport.id,
+        schemaId: appConfig.attestations.optimismMainnet.impactReport.id,
         attester: connectedAddress,
         recipient: post?.author,
         emotion: form.emotion,
@@ -108,21 +108,21 @@ export default function Short() {
       return notification.warning("Debes responder ambas preguntas");
     }
     try {
-      const schemaEncoder = new SchemaEncoder(appConfig.attestations.scrollSepolia.impactReport.schema);
+      const schemaEncoder = new SchemaEncoder(appConfig.attestations.optimismMainnet.impactReport.schema);
       const encodedData = schemaEncoder.encodeData([
-        { name: "cortoAddress", value: zeroAddress, type: "address" },
-        { name: "cortoTokenId", value: zeroAddress, type: "uint256" },
-        { name: "cortoId", value: post.id, type: "string" },
-        { name: "cortoName", value: post.title, type: "string" },
+        { name: "postAddress", value: zeroAddress, type: "address" },
+        { name: "postTokenId", value: zeroAddress, type: "uint256" },
+        { name: "postId", value: post.id, type: "string" },
+        { name: "postName", value: post.title, type: "string" },
         { name: "emotionQuestion", value: cortoImpactAttestation.emotionQuestion, type: "string" },
         { name: "emotion", value: form.emotion, type: "string" },
         { name: "impactQuestion", value: cortoImpactAttestation.impactQuestion, type: "string" },
-        { name: "impactRating", value: form.impactRating, type: "uint8" },
-        { name: "attestRole", value: cortoImpactAttestation.attestRole, type: "string" },
+        { name: "impact", value: form.impactRating, type: "uint8" },
+        { name: "attesterRole", value: cortoImpactAttestation.attestRole, type: "string" },
       ]);
 
       const transaction = await eas.attest({
-        schema: appConfig.attestations.scrollSepolia.impactReport.id,
+        schema: appConfig.attestations.optimismMainnet.impactReport.id,
         data: {
           recipient: post.author,
           expirationTime: undefined,
@@ -161,21 +161,21 @@ export default function Short() {
       return notification.warning("Debes responder ambas preguntas");
     }
     try {
-      const schemaEncoder = new SchemaEncoder(appConfig.attestations.scrollSepolia.impactReport.schema);
+      const schemaEncoder = new SchemaEncoder(appConfig.attestations.optimismMainnet.impactReport.schema);
       const encodedData = schemaEncoder.encodeData([
-        { name: "cortoAddress", value: zeroAddress, type: "address" },
-        { name: "cortoTokenId", value: zeroAddress, type: "uint256" },
-        { name: "cortoId", value: post.id, type: "string" },
-        { name: "cortoName", value: post.title, type: "string" },
+        { name: "postAddress", value: zeroAddress, type: "address" },
+        { name: "postTokenId", value: zeroAddress, type: "uint256" },
+        { name: "postId", value: post.id, type: "string" },
+        { name: "postName", value: post.title, type: "string" },
         { name: "emotionQuestion", value: trueStoryAttestation.emotionQuestion, type: "string" },
         { name: "emotion", value: form.emotion, type: "string" },
         { name: "impactQuestion", value: trueStoryAttestation.impactQuestion, type: "string" },
-        { name: "impactRating", value: form.impactRating, type: "uint8" },
-        { name: "attestRole", value: "interviewee", type: "string" },
+        { name: "impact", value: form.impactRating, type: "uint8" },
+        { name: "attesterRole", value: "interviewee", type: "string" },
       ]);
 
       const transaction = await eas.attest({
-        schema: appConfig.attestations.scrollSepolia.impactReport.id,
+        schema: appConfig.attestations.optimismMainnet.impactReport.id,
         data: {
           recipient: post.author,
           expirationTime: undefined,
@@ -205,10 +205,10 @@ export default function Short() {
       });
       const data = await response.json();
       setPost(data.post);
-      notification.success("El corto fue actualizado exitosamente");
+      notification.success("El post fue actualizado exitosamente");
     } catch (error) {
       console.error(error);
-      notification.error("No fue posible actualizar el corto");
+      notification.error("No fue posible actualizar el post");
     } finally {
       setCollaboratorAddress("");
       setShowCollaboratorInput(false);
@@ -234,7 +234,7 @@ export default function Short() {
                     <span>Colabora:</span>{" "}
                     <Link
                       className="flex text-accent font-medium"
-                      href={`${appConfig.explorers.scrollSepolia.blockchain}/${post.collaborators[0]}`}
+                      href={`${appConfig.explorers.optimismMainnet.blockchain}/${post.collaborators[0]}`}
                     >
                       {truncateString(post.collaborators[0], 8, 10)}
                       <ArrowTopRightOnSquareIcon className="h-4 w-4 ml-2" />
@@ -311,7 +311,7 @@ export default function Short() {
                       </div>
                       <div className="space-y-2">
                         <label className="label py-1" htmlFor="impactRating">
-                          <span className="label-text">Impacto de este corto:</span>
+                          <span className="label-text">Impacto de esta publicación:</span>
                         </label>
                         <div className="w-full flex justify-center">
                           <div className="rating rating-md space-x-3">
@@ -378,7 +378,7 @@ export default function Short() {
                         </div>
                         <div className="w-full flex flex-col items-center pt-2 space-y-2">
                           <Link
-                            href={appConfig.explorers.scrollSepolia.attestation + `/${userAttestation.id}`}
+                            href={appConfig.explorers.optimismMainnet.attestation + `/${userAttestation.id}`}
                             target="blank"
                             rel="noopener noreferrer"
                             className="flex items-center space-x-1 dark:text-accent font-bold"
@@ -387,7 +387,7 @@ export default function Short() {
                             <ArrowTopRightOnSquareIcon className="h-4 w-4 mb-1" />
                           </Link>
                           <Link
-                            href={appConfig.explorers.scrollSepolia.blockchain + `/tx/${userAttestation.txId}`}
+                            href={appConfig.explorers.optimismMainnet.blockchain + `/tx/${userAttestation.txId}`}
                             target="blank"
                             rel="noopener noreferrer"
                             className="flex items-center space-x-1 text-blue-700 dark:text-accent font-bold"

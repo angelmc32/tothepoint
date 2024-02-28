@@ -102,6 +102,7 @@ model Vote {
 }
 
 enum Chain {
+  OPTIMISM_MAINNET
   ARBITRUM_ONE
   SCROLL_SEPOLIA
 }

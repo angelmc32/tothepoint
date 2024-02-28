@@ -21,8 +21,8 @@ export const useEAS = () => {
         return;
       }
       // Initialize the sdk with the address of the EAS Schema contract address
-      const easInstance = new EAS(appConfig.addresses.scrollSepolia.easContract);
-      const schemaRegistry = new SchemaRegistry(appConfig.addresses.scrollSepolia.schemaRegistryContract);
+      const easInstance = new EAS(appConfig.addresses.optimismMainnet.easContract);
+      const schemaRegistry = new SchemaRegistry(appConfig.addresses.optimismMainnet.schemaRegistryContract);
 
       // Gets a default provider (in production use something else like infura/alchemy)
       const provider = new ethers.BrowserProvider(window.ethereum);
