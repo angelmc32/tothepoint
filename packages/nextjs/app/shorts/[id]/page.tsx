@@ -32,10 +32,10 @@ export default function Short() {
   const [userAttestation, setUserAttestation] = useState<AttestationType | undefined>(undefined);
 
   const router = useRouter();
-  const { eas } = useEAS();
+  const network = useNetwork();
+  const { eas } = useEAS({ chainId: network.chain?.id ?? 1 });
   const { id } = useParams();
   const { address: connectedAddress, isConnected } = useAccount();
-  const network = useNetwork();
   const session = useSession();
 
   useEffect(() => {
