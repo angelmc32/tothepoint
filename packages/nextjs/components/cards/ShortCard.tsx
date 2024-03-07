@@ -25,7 +25,7 @@ export default function ShortCard({ children, id, title, content, mediaUrl, layo
           children
         ) : (
           <div className="card-actions justify-end">
-            <Link href={`/shorts/${id}`}>
+            <Link href={`/povs/${id}`}>
               <button className="btn btn-primary">Ver 👀</button>
             </Link>
           </div>

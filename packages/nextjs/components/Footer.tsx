@@ -30,7 +30,7 @@ export const Footer = () => {
         </div>
         <ul className={`menu menu-horizontal w-full md:w-1/3 md:flex md:justify-center ${museoModernoFont.className}`}>
           <div className="flex justify-center items-center gap-2 text-sm w-full md:w-auto">
-            encorto 2024 ©<span>·</span>
+            ToThePoint 2024 ©<span>·</span>
             <div className="flex justify-center items-center gap-2">
               <p className="m-0 text-center">frutero club</p>
             </div>

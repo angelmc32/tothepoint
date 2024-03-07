@@ -32,7 +32,7 @@ const CreatePost: NextPage = () => {
   async function createReport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!file || !form.title || !form.description || !address) {
-      return notification.error("Todos los campos son requeridos para crear Reporte");
+      return notification.error("Todos los campos son requeridos para crear el POV");
     }
     setIsLoading(true);
     try {
@@ -62,7 +62,7 @@ const CreatePost: NextPage = () => {
           title: "",
           description: "",
         });
-        push(`/shorts/${data.post.id}`);
+        push(`/povs/${data.post.id}`);
       } else {
         notification.error(data.error);
       }
@@ -82,14 +82,14 @@ const CreatePost: NextPage = () => {
               Cuenta <span className="underline underline-offset-8 decoration-accent">historias</span> <br />y comparte
               emociones ✨
             </h1>
-            <p className="pt-4 text-lg px-4 lg:pl-12">
-              Descubre <span className="text-accent font-bold">en corto</span> el impacto
-              <br className="hidden md:block" /> de lo que sucede en Web3
+            <p className="pt-4 text-lg lg:px-4 lg:pl-12">
+              Ayuda a otros a descubrir el <span className="text-accent font-bold">impacto</span> <br />
+              de lo que sucede en Web3
             </p>
           </div>
-          <div className="w-full lg:w-1/2 px-4">
+          <div className="w-full lg:w-1/2 lg:px-4">
             <div className="bg-base-100 border-primary border-2 shadow-md shadow-secondary rounded-xl px-6 lg:px-8 mb-6 space-y-2 py-8">
-              <h4 className="text-xl">Crea un Reporte</h4>
+              <h4 className="text-xl">Crea un POV</h4>
               <form className="flex flex-col space-y-1 w-full" onSubmit={createReport}>
                 <div>
                   <label className="label py-1" htmlFor="title">
@@ -145,7 +145,7 @@ const CreatePost: NextPage = () => {
                       className="btn btn-accent rounded-lg"
                       disabled={isLoading || !form.description || !form.title}
                     >
-                      {isLoading ? "Creando..." : "Crear reporte"}
+                      {isLoading ? "Creando..." : "Crear POV"}
                       {isLoading && <span className="loading loading-spinner loading-sm"></span>}
                     </button>
                   ) : (

@@ -58,7 +58,7 @@ const Attestations: NextPage = () => {
                     </div>
                     <div className="space-y-2 w-full">
                       <label className="label py-1" htmlFor="impactRating">
-                        <span className="label-text">Impacto de este corto:</span>
+                        <span className="label-text">Impacto de esta publicación:</span>
                       </label>
                       <div className="w-full flex justify-center">
                         <div className="rating rating-md space-x-3">

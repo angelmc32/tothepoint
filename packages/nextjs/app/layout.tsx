@@ -13,14 +13,14 @@ const imageUrl = `${baseUrl}/thumbnail.jpg`;
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "encorto",
-    template: "%s | encorto",
+    default: "ToThePoint",
+    template: "%s | ToThePoint",
   },
   description: "Create and publish impact-worthy posts",
   openGraph: {
     title: {
-      default: "encorto",
-      template: "%s | encorto",
+      default: "ToThePoint",
+      template: "%s | ToThePoint",
     },
     description: "Create and publish impact-worthy posts",
     images: [
@@ -33,13 +33,17 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: [imageUrl],
     title: {
-      default: "encorto",
-      template: "%s | encorto",
+      default: "ToThePoint",
+      template: "%s | ToThePoint",
     },
     description: "Create and publish impact-worthy posts",
   },
   icons: {
-    icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
+    icon: [
+      {
+        url: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>",
+      },
+    ],
   },
 };
 

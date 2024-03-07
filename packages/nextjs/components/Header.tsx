@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useCallback, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bars3Icon, NewspaperIcon, PencilIcon, SparklesIcon } from "@heroicons/react/24/outline";
@@ -74,14 +73,9 @@ export const Header = () => {
     <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
       <div className="navbar-start w-auto lg:w-1/2 pl-4">
         <Link href="/" passHref className="flex items-center gap-2 shrink-0">
-          <div className="flex relative w-10 h-10">
-            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
-          </div>
-          <div className="hidden lg:flex lg:flex-col">
-            <span className={`${museoModernoFont.className} text-2xl`}>
-              en<span className="text-accent font-bold">corto</span>
-            </span>
-          </div>
+          <span className={`${museoModernoFont.className} text-2xl`}>
+            ToThe<span className="text-accent font-bold">Point</span>
+          </span>
         </Link>
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
