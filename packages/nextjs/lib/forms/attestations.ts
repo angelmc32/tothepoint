@@ -5,8 +5,8 @@ export const cortoImpactAttestation = {
 };
 
 export const trueStoryAttestation = {
-  cortoName: "Entrevista para Reporte de Impacto",
-  emotionQuestion: "¿Cómo te sentiste durante la entrevista?",
-  impactQuestion: "¿Cómo calificas el impacto de ETHDenver en tu vida y carrera?",
+  cortoName: "Impact Report Interview",
+  emotionQuestion: "How did you feel during the interview?",
+  impactQuestion: "How would you rate the impact of ETH Denver on your life and career?",
   attestRole: "interviewee",
 };
