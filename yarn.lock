@@ -2130,6 +2130,7 @@ __metadata:
     prettier: ~2.8.4
     prisma: ^5.9.1
     qrcode.react: ~3.1.0
+    random-word-slugs: ^0.1.7
     react: ~18.2.0
     react-copy-to-clipboard: ~5.1.0
     react-dom: ~18.2.0
@@ -11635,6 +11636,13 @@ __metadata:
   version: 1.1.0
   resolution: "radix3@npm:1.1.0"
   checksum: e5e6ed8fcf68be4d124bca4f7da7ba0fc7c5b6f9e98bc3f4424459c45d50f1f92506c5f7f8421b5cfee5823c524a4a2cef416053e88845813ce9fc9c7086729a
+  languageName: node
+  linkType: hard
+
+"random-word-slugs@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "random-word-slugs@npm:0.1.7"
+  checksum: 4df9c30ee2d97993cd7c9c84b5c500d5f12b560365d64c41eb3e8c0dac69e07ac4984d9d1eaef177055397762e5e1904a64ffb424d233e064c9b2fd8a2e4520b
   languageName: node
   linkType: hard
 
