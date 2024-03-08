@@ -8,7 +8,12 @@ import { useSession } from "next-auth/react";
 import { zeroAddress } from "viem";
 import { useAccount, useNetwork } from "wagmi";
 import { useBalance } from "wagmi";
-import { ArrowLeftIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLeftIcon,
+  ArrowTopRightOnSquareIcon,
+  ClipboardDocumentCheckIcon,
+  ClipboardDocumentIcon,
+} from "@heroicons/react/24/outline";
 import ShortCard from "~~/components/cards/ShortCard";
 import { AddressInput, RainbowKitFormConnectButton } from "~~/components/scaffold-eth";
 import appConfig from "~~/config";
@@ -17,7 +22,11 @@ import { cortoImpactAttestation, trueStoryAttestation } from "~~/lib/forms/attes
 import { emotionsArray, getEmojiFromString } from "~~/lib/forms/emotions";
 import { AttestationType, PostType } from "~~/types";
 import { notification } from "~~/utils/scaffold-eth";
-import { truncateString } from "~~/utils/string";
+import { copyToClipboard, truncateString } from "~~/utils/string";
+
+const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : `http://localhost:3000`;
 
 export default function Pov() {
   const [post, setPost] = useState<PostType | undefined>(undefined);
@@ -31,6 +40,7 @@ export default function Pov() {
   const [isLoading, setIsLoading] = useState(false);
   const [isInterviewee, setIsInterviewee] = useState(false);
   const [userAttestation, setUserAttestation] = useState<AttestationType | undefined>(undefined);
+  const [isUrlCopied, setIsUrlCopied] = useState(false);
 
   const router = useRouter();
   const network = useNetwork();
@@ -235,11 +245,29 @@ export default function Pov() {
   return (
     <div className="hero bg-base-200 flex-grow pt-8 md:pt-16 lg:pt-8 h-full xl:pt-16">
       <div className="h-full align-start px-6 flex flex-col xl:pb-16 w-full md:w-3/5 lg:px-16 space-y-4 xl:w-1/2">
-        <div className="w-full">
+        <div className="w-full flex items-center justify-between">
           <button className="btn btn-secondary btn-sm !text-sm" onClick={() => router.back()}>
             <ArrowLeftIcon className="h-3 w-3" />
             Atrás
           </button>
+          {post && connectedAddress === post?.author && (
+            <button
+              className="btn btn-outline btn-accent btn-sm !text-sm bg-base-200"
+              onClick={() => {
+                copyToClipboard(`${baseUrl}/povs/${id}/true-story`);
+                notification.info("Se ha copiado una liga para que la persona entrevistada firme su atestación");
+                setIsUrlCopied(true);
+                setTimeout(() => setIsUrlCopied(false), 3000);
+              }}
+            >
+              {isUrlCopied ? (
+                <ClipboardDocumentCheckIcon className="h-4 w-4" />
+              ) : (
+                <ClipboardDocumentIcon className="h-4 w-4" />
+              )}
+              Liga entrevista
+            </button>
+          )}
         </div>
         <div className="w-full">
           {hasLoadedPost && post ? (
