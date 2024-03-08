@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { NextPage } from "next";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import { isAddress } from "viem";
 import { useAccount } from "wagmi";
 import { AddressInput, RainbowKitFormConnectButton } from "~~/components/scaffold-eth";
 import supabase from "~~/services/supabase";
@@ -33,6 +34,9 @@ const CreatePost: NextPage = () => {
     event.preventDefault();
     if (!file || !form.title || !form.description || !address) {
       return notification.error("Todos los campos son requeridos para crear el POV");
+    }
+    if (collaboratorAddress.length > 0 && !isAddress(collaboratorAddress)) {
+      return notification.error("Introduce una dirección o ENS válidos para agregar colaboraciones");
     }
     setIsLoading(true);
     try {
