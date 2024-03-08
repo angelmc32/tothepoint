@@ -24,7 +24,7 @@ import { AttestationType, PostType } from "~~/types";
 import { notification } from "~~/utils/scaffold-eth";
 import { copyToClipboard, truncateString } from "~~/utils/string";
 
-const baseUrl = process.env.NEXTAUTH_URL ? `https://${process.env.NEXTAUTH_URL}` : `http://localhost:3000`;
+const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://tothepoint.vercel.app` : `http://localhost:3000`;
 
 export default function Pov() {
   const [post, setPost] = useState<PostType | undefined>(undefined);
