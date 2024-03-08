@@ -115,7 +115,7 @@ export default function Pov() {
       setIsLoading(false);
       return notification.warning("Debes responder ambas preguntas");
     }
-    if (isErrorUserBalance || isLoadingUserBalance || parseFloat(userBalance?.formatted ?? "0") < 0.005) {
+    if (isErrorUserBalance || isLoadingUserBalance || parseFloat(userBalance?.formatted ?? "0") < 0.0005) {
       setIsLoading(false);
       return notification.warning("Asegúrate de conectar tu cartera y contar con suficiente ETH en Optimism Mainnet");
     }
@@ -172,7 +172,7 @@ export default function Pov() {
       setIsLoading(false);
       return notification.warning("Debes responder ambas preguntas");
     }
-    if (isErrorUserBalance || isLoadingUserBalance || parseFloat(userBalance?.formatted ?? "0") < 0.005) {
+    if (isErrorUserBalance || isLoadingUserBalance || parseFloat(userBalance?.formatted ?? "0") < 0.0005) {
       setIsLoading(false);
       return notification.warning("Asegúrate de conectar tu cartera y contar con suficiente ETH en Optimism Mainnet");
     }
