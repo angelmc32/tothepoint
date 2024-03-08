@@ -1,9 +1,10 @@
-import { User } from "@prisma/client";
+import { Post, User } from "@prisma/client";
 
 export type PostType = {
   attesters: string[];
   attestations: AttestationType[];
-  author: string;
+  author: User;
+  authorId: string;
   collaborators: string[];
   comments: CommentType[];
   content: string;
@@ -28,7 +29,7 @@ export type AttestationType = {
   impact: number;
   attesterRole: string;
   category: string;
-  post: PostType;
+  post: Post;
   postId: string;
 };
 
@@ -39,7 +40,7 @@ export type CommentType = {
   downvotes: number;
   author: string;
   authorId: string;
-  post: PostType[];
+  post: Post;
   postId: string;
 };
 
@@ -47,7 +48,7 @@ export type VoteType = {
   id: string;
   user: User;
   userId: string;
-  post: PostType;
+  post: Post;
   postId: string;
   voteValue: number; // Values: -1 (downvote), 0 (no vote), 1 (upvote)
 };

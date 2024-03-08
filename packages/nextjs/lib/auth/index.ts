@@ -1,7 +1,19 @@
+import { User } from "@prisma/client";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
+import { RandomWordOptions, generateSlug } from "random-word-slugs";
 import { SiweMessage } from "siwe";
+import prisma from "~~/services/prisma";
+
+const usernameSlugOptions: RandomWordOptions<3> = {
+  format: "camel",
+  partsOfSpeech: ["adjective", "noun", "adjective"],
+  categories: {
+    adjective: ["color", "appearance"],
+    noun: ["animals"],
+  },
+};
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -27,6 +39,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials, req) {
+        let user: User;
         try {
           const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"));
           const nextAuthUrl = new URL(process.env.NEXTAUTH_URL ?? "");
@@ -38,8 +51,22 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (result.success) {
+            const existingUser = await prisma.user.findFirst({
+              where: { id: siwe.address },
+            });
+
+            if (!existingUser) {
+              user = await prisma.user.create({
+                data: {
+                  id: siwe.address,
+                  username: generateSlug(3, usernameSlugOptions),
+                },
+              });
+            } else {
+              user = existingUser;
+            }
             return {
-              id: siwe.address,
+              id: user.id,
             };
           }
           return null;
