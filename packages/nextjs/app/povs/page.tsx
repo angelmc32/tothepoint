@@ -2,23 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Post } from "@prisma/client";
 import type { NextPage } from "next";
 import ShortCard from "~~/components/cards/ShortCard";
 import { notification } from "~~/utils/scaffold-eth";
 
-type PostType = {
-  id: string;
-  title: string;
-  content: string;
-  mediaUrl: string;
-  upvotes: number;
-  downvotes: number;
-  createdAt: string;
-  updatedAt: string;
-};
-
 const Home: NextPage = () => {
-  const [posts, setPosts] = useState<PostType[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   useEffect(() => {
     async function fetchPosts() {
       const response = await fetch("api/posts", {

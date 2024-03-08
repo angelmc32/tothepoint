@@ -12,7 +12,7 @@ import supabase from "~~/services/supabase";
 import { notification } from "~~/utils/scaffold-eth";
 
 const supabaseApiUrl = process.env.NEXT_PUBLIC_SUPABASE_API_URL ?? "";
-const cdnUrl = `${supabaseApiUrl}/storage/v1/object/public/videos/`;
+const cdnUrl = `${supabaseApiUrl}/storage/v1/object/public/povs/`;
 
 const CreatePost: NextPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -41,7 +41,7 @@ const CreatePost: NextPage = () => {
     setIsLoading(true);
     try {
       const { data: videoData, error: videoUploadError } = await supabase.storage
-        .from("videos")
+        .from("povs")
         .upload(uuidv4() + path.extname(file.name), file);
 
       if (videoUploadError) {
@@ -55,7 +55,7 @@ const CreatePost: NextPage = () => {
           title: form.title,
           description: form.description,
           connectedAddress: address,
-          collaborator: collaboratorAddress,
+          collaborator: collaboratorAddress.length > 0 ? collaboratorAddress : null,
           mediaUrl: cdnUrl + videoData?.path,
         }),
       });

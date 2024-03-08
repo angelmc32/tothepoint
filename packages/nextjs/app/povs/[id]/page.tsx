@@ -4,6 +4,7 @@ import React, { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { SchemaEncoder } from "@ethereum-attestation-service/eas-sdk";
+import { Post } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { zeroAddress } from "viem";
 import { useAccount, useNetwork } from "wagmi";
@@ -20,14 +21,14 @@ import appConfig from "~~/config";
 import { useEAS } from "~~/hooks/useEAS";
 import { cortoImpactAttestation, trueStoryAttestation } from "~~/lib/forms/attestations";
 import { emotionsArray, getEmojiFromString } from "~~/lib/forms/emotions";
-import { AttestationType, PostType } from "~~/types";
+import { AttestationType } from "~~/types";
 import { notification } from "~~/utils/scaffold-eth";
 import { copyToClipboard, truncateString } from "~~/utils/string";
 
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://tothepoint.vercel.app` : `http://localhost:3000`;
 
 export default function Pov() {
-  const [post, setPost] = useState<PostType | undefined>(undefined);
+  const [post, setPost] = useState<Post | undefined>(undefined);
   const [hasLoadedPost, setHasLoadedPost] = useState(false);
   const [form, setForm] = useState({
     emotion: "",
@@ -61,7 +62,7 @@ export default function Pov() {
         method: "GET",
       });
       const data = await response.json();
-      setPost(data.post as PostType);
+      setPost(data.post);
       const userAttestations: AttestationType[] = data.post.attestations.filter(
         (attestation: AttestationType) => attestation.attester === connectedAddress,
       );
@@ -98,7 +99,7 @@ export default function Pov() {
         chain: chainName,
         schemaId: appConfig.attestations.optimismMainnet.impactReport.id,
         attester: connectedAddress,
-        recipient: post?.author,
+        recipient: post?.authorId,
         emotion: form.emotion,
         impact: form.impactRating,
         attesterRole: isInterviewee ? "interviewee" : "audience",
@@ -144,7 +145,7 @@ export default function Pov() {
       const transaction = await eas.attest({
         schema: appConfig.attestations.optimismMainnet.impactReport.id,
         data: {
-          recipient: post.author,
+          recipient: post.authorId,
           expirationTime: undefined,
           revocable: true,
           data: encodedData,
@@ -153,7 +154,7 @@ export default function Pov() {
 
       const newAttestationUID = await transaction.wait();
       const updatedPost = await createAttestation(newAttestationUID, transaction.tx.hash);
-      setPost(updatedPost as PostType);
+      setPost(updatedPost);
 
       const userAttestations: AttestationType[] = updatedPost.attestations.filter(
         (attestation: AttestationType) => attestation.attester === connectedAddress,
@@ -201,7 +202,7 @@ export default function Pov() {
       const transaction = await eas.attest({
         schema: appConfig.attestations.optimismMainnet.impactReport.id,
         data: {
-          recipient: post.author,
+          recipient: post.authorId,
           expirationTime: undefined,
           revocable: true,
           data: encodedData,
@@ -248,7 +249,7 @@ export default function Pov() {
             <ArrowLeftIcon className="h-3 w-3" />
             Atrás
           </button>
-          {post && connectedAddress === post?.author && (
+          {post && connectedAddress === post?.authorId && (
             <button
               className="btn btn-outline btn-accent btn-sm !text-sm bg-base-200"
               onClick={() => {
@@ -275,7 +276,7 @@ export default function Pov() {
                   <div className="flex space-x-2">
                     <span>Colabora:</span>{" "}
                     <Link
-                      className="flex text-accent font-medium"
+                      className="flex text-accent font-medium items-center"
                       href={`${appConfig.explorers.optimismMainnet.blockchain}/${post.collaborators[0]}`}
                     >
                       {truncateString(post.collaborators[0], 8, 10)}

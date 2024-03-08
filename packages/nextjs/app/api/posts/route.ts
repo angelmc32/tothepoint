@@ -64,8 +64,8 @@ export async function POST(request: NextRequest) {
         title,
         content: description,
         mediaUrl,
-        author: sessionAddress,
-        collaborators: [collaborator],
+        authorId: sessionAddress,
+        collaborators: collaborator ? [collaborator] : undefined,
       },
     });
     return NextResponse.json({ post, message: "Post was created successfully", success: true });

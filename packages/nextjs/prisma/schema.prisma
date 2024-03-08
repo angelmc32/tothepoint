@@ -13,22 +13,23 @@ datasource db {
 model User {
   id                    String              @id
   username              String              @unique
-  wallet                String              @unique
   email                 String?             @unique
   bio                   String?
   websiteUrl            String?
   avatarUrl             String?
   bannerUrl             String?
   profile               Profile?
+  posts                 Post[]
   comments              Comment[]
   votes                 Vote[]
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
 
-  @@index([username, wallet, email])
+  @@index([id, username, email])
 }
 
 model Profile {
+  id                    String              @id @default(uuid())
   displayName           String
   firstName             String?
   lastName              String?
@@ -49,9 +50,11 @@ model Post {
   title                 String
   content               String
   mediaUrl              String
+  tags                  String[]
   upvotes               Int                 @default(0)
   downvotes             Int                 @default(0)
-  author                String
+  author                User                @relation(fields: [authorId], references: [id])
+  authorId              String
   collaborators         String[]
   attesters             String[]       
   attestations          Attestation[]
@@ -62,7 +65,7 @@ model Post {
 }
 
 model Attestation {
-  id                    String              @id @unique
+  id                    String              @id @default(uuid())
   txId                  String              @unique
   chain                 Chain
   schemaId              String
@@ -93,8 +96,8 @@ model Comment {
 
 model Vote {
   id                    Int       @id @default(autoincrement())
-  user                  User      @relation(fields: [userId], references: [id])
-  userId                String
+  voter                 User      @relation(fields: [voterId], references: [id])
+  voterId               String
   post                  Post?     @relation(fields: [postId], references: [id])
   postId                String?
   voteValue             Int       // Values: -1 (downvote), 0 (no vote), 1 (upvote)
@@ -103,8 +106,6 @@ model Vote {
 
 enum Chain {
   OPTIMISM_MAINNET
-  ARBITRUM_ONE
-  SCROLL_SEPOLIA
 }
 
 enum ShortCategory {
