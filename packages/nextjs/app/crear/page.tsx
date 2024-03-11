@@ -7,6 +7,7 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import { isAddress } from "viem";
 import { useAccount } from "wagmi";
+import { CloudArrowUpIcon, GlobeAltIcon } from "@heroicons/react/24/outline";
 import { AddressInput, RainbowKitFormConnectButton } from "~~/components/scaffold-eth";
 import supabase from "~~/services/supabase";
 import { notification } from "~~/utils/scaffold-eth";
@@ -17,10 +18,12 @@ const cdnUrl = `${supabaseApiUrl}/storage/v1/object/public/povs/`;
 const CreatePost: NextPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [form, setForm] = useState({
+    mediaUrl: "",
     title: "",
     description: "",
   });
   const [collaboratorAddress, setCollaboratorAddress] = useState("");
+  const [isUploadVideo, setIsUploadVideo] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const { push } = useRouter();
@@ -32,20 +35,31 @@ const CreatePost: NextPage = () => {
 
   async function createReport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!file || !form.title || !form.description || !address) {
+    if (
+      !form.title ||
+      !form.description ||
+      !address ||
+      (!isUploadVideo && !form.mediaUrl) ||
+      (isUploadVideo && !file)
+    ) {
       return notification.error("Todos los campos son requeridos para crear el POV");
     }
     if (collaboratorAddress.length > 0 && !isAddress(collaboratorAddress)) {
       return notification.error("Introduce una dirección o ENS válidos para agregar colaboraciones");
     }
+    let mediaUrl = form.mediaUrl;
     setIsLoading(true);
     try {
-      const { data: videoData, error: videoUploadError } = await supabase.storage
-        .from("povs")
-        .upload(uuidv4() + path.extname(file.name), file);
+      if (isUploadVideo && file) {
+        const { data: videoData, error: videoUploadError } = await supabase.storage
+          .from("povs")
+          .upload(uuidv4() + path.extname(file.name), file);
 
-      if (videoUploadError) {
-        notification.error("Error al subir el video");
+        if (videoUploadError) {
+          notification.error("Error al subir el video");
+          return;
+        }
+        mediaUrl = cdnUrl + videoData?.path;
       }
 
       const response = await fetch("api/posts", {
@@ -56,13 +70,14 @@ const CreatePost: NextPage = () => {
           description: form.description,
           connectedAddress: address,
           collaborator: collaboratorAddress.length > 0 ? collaboratorAddress : null,
-          mediaUrl: cdnUrl + videoData?.path,
+          mediaUrl,
         }),
       });
       const data = await response.json();
       if (response.status === 200) {
         notification.success(`Tu publicación fue creada exitosamente`);
         setForm({
+          mediaUrl: "",
           title: "",
           description: "",
         });
@@ -96,15 +111,42 @@ const CreatePost: NextPage = () => {
               <h4 className="text-xl">Crea un POV</h4>
               <form className="flex flex-col space-y-1 w-full" onSubmit={createReport}>
                 <div>
-                  <label className="label py-1" htmlFor="title">
-                    <span className="text-base label-text">Video</span>
-                  </label>
-                  <input
-                    type="file"
-                    className="file-input file-input-primary file-input-bordered border-2 w-full rounded-lg h-10 bg-base-200"
-                    onChange={handleFileChange}
-                    accept="video/mp4,video/x-m4v,video/*"
-                  />
+                  <div className="w-full flex justify-between items-center">
+                    <label className="label py-1" htmlFor="title">
+                      <span className="text-base label-text">Video</span>
+                    </label>
+                    <button
+                      className="btn btn-ghost btn-accent btn-xs !text-sm"
+                      onClick={event => {
+                        event.preventDefault();
+                        if (!isUploadVideo)
+                          notification.warning(
+                            "Por el momento solo puedes registrar ligas de video, pronto rehabilitaremos las subidas de video",
+                          );
+                        setIsUploadVideo(false);
+                      }}
+                    >
+                      {isUploadVideo ? <CloudArrowUpIcon className="h-5 w-5" /> : <GlobeAltIcon className="h-5 w-5" />}
+                    </button>
+                  </div>
+                  {isUploadVideo ? (
+                    <input
+                      type="file"
+                      className="file-input file-input-primary file-input-bordered border-2 w-full rounded-lg h-10 bg-base-200"
+                      onChange={handleFileChange}
+                      accept="video/mp4,video/x-m4v,video/*"
+                    />
+                  ) : (
+                    <input
+                      id="mediaUrl"
+                      name="mediaUrl"
+                      value={form.mediaUrl}
+                      onChange={event => setForm({ ...form, mediaUrl: event.target.value })}
+                      type="text"
+                      placeholder="Liga de YouTube/Loom/etc..."
+                      className="input input-primary border-2 w-full rounded-lg h-10 bg-base-200 input-bordered"
+                    />
+                  )}
                 </div>
                 <div>
                   <label className="label py-1" htmlFor="title">

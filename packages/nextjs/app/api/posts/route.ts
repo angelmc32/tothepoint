@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   const data = await request.json();
 
   const { title, description, connectedAddress, collaborator, mediaUrl } = data;
-
+  console.log(title, description, connectedAddress, collaborator, mediaUrl);
   if (!mediaUrl || !title || !description || !connectedAddress) {
     return NextResponse.json(
       { error: "Missing variables in request", success: false },
