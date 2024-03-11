@@ -5,10 +5,12 @@ import Link from "next/link";
 import { Post } from "@prisma/client";
 import type { NextPage } from "next";
 import ShortCard from "~~/components/cards/ShortCard";
+import Loader from "~~/components/loader";
 import { notification } from "~~/utils/scaffold-eth";
 
 const Home: NextPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [hasLoaded, setHasLoaded] = useState(false);
   useEffect(() => {
     async function fetchPosts() {
       const response = await fetch("api/posts", {
@@ -18,6 +20,8 @@ const Home: NextPage = () => {
       setPosts(data.posts);
       if (response.status !== 200) {
         notification.warning("Ocurrió un error al cargar las publicaciones");
+      } else {
+        setHasLoaded(true);
       }
     }
     fetchPosts();
@@ -33,11 +37,27 @@ const Home: NextPage = () => {
             <button className="btn btn-accent">Crear ✍️</button>
           </Link>
         </div>
-        <div className="grid gap-6 auto-rows-fr grid-cols-1 w-full md:w-4/5">
-          {posts.map(post => (
-            <ShortCard key={post.id} id={post.id} title={post.title} content={post.content} mediaUrl={post.mediaUrl} />
-          ))}
-        </div>
+        {hasLoaded ? (
+          posts?.length > 0 ? (
+            <div className="grid gap-6 auto-rows-fr grid-cols-1 w-full md:w-4/5">
+              {posts.map(post => (
+                <ShortCard
+                  key={post.id}
+                  id={post.id}
+                  title={post.title}
+                  content={post.content}
+                  mediaUrl={post.mediaUrl}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="w-full md:w-4/5 flex justify-center py-8 text-xl">
+              <p>No fue posible cargar los POVs</p>
+            </div>
+          )
+        ) : (
+          <Loader />
+        )}
       </div>
     </>
   );
